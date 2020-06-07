@@ -83,11 +83,9 @@ let ExtractCssConfig = Object.assign({}, CommonConfig, {
 
 let configs = [ InlineCssConfig, ExtractCssConfig ]
 
-if (process.env.NODE_ENV === 'production') {
-
-  configs.forEach(function(config) {
-    config.devtool = '#source-map'
-    config.output.filename = `${config.output.filename}.min.js`,
+configs.forEach(function(config) {
+  config.devtool = '#source-map'
+  config.output.filename = `${config.output.filename}.min.js`,
     config.plugins = (config.plugins || []).concat([
       new webpack.DefinePlugin({
         'process.env': {
@@ -104,8 +102,6 @@ if (process.env.NODE_ENV === 'production') {
         minimize: true
       })
     ])
-  }, this);
-
-}
+}, this);
 
 module.exports = configs

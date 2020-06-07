@@ -2,14 +2,26 @@
   <div>
     <transition :name="mergedOption.transition">
       <div
-      :id="mergedOption.id"
-      class="et-wrapper"
-      :class="clazz"
-      :transition="mergedOption.transition"
-      v-show="showing"
+              :id="mergedOption.id"
+              class="et-wrapper"
+              :class="clazz"
+              :transition="mergedOption.transition"
+              v-show="showing"
       >
         <span class="et-content" v-html="mergedOption.message"></span>
-        <a class="et-close" v-if="mergedOption.closeable" v-on:click="close()">&times;</a>
+        <a v-if="mergedOption.closeable" v-on:click="close()">
+          <i class="fas fa-times-circle"></i>
+        </a>
+        <div class="et-actions" v-show="mergedOption.actions.length">
+          <button v-for="action in mergedOption.actions"
+                  type="button"
+                  class="btn"
+                  v-on:click="doAction(action)"
+                  v-bind:class="[`btn-${action.btn || 'primary'}`]"
+          >
+            {{action.text}}
+          </button>
+        </div>
       </div>
     </transition>
   </div>
@@ -34,6 +46,9 @@
   .et-content {
     text-align: center;
   }
+  .et-actions {
+    padding: 5px;
+  }
   .et-wrapper .et-close {
     position: absolute;
     top: 0;
@@ -41,24 +56,24 @@
     color: white;
   }
   .et-wrapper.et-left {
-      right: auto;
-      left: 0;
+    right: auto;
+    left: 0;
   }
   .et-wrapper.et-right {
-      left: auto;
-      right: 0;
+    left: auto;
+    right: 0;
   }
   .et-wrapper.et-center {
-      left: 50%;
-      transform: translateX(-50%);
+    left: 50%;
+    transform: translateX(-50%);
   }
   .et-wrapper.et-top {
-      top: 0;
-      bottom: auto;
+    top: 0;
+    bottom: auto;
   }
   .et-wrapper.et-bottom {
-      top: auto;
-      bottom: 0;
+    top: auto;
+    bottom: 0;
   }
   .et-wrapper.et-alert {
     background-color: rgba(189, 19, 19, 0.7);
@@ -141,7 +156,8 @@
     transition: 'fade',
     duration: 5000,
     message: '',
-    closeable: false
+    closeable: false,
+    actions: []
   }
   export default {
     DEFAULT_OPT: DEFAULT_OPT,
@@ -187,6 +203,9 @@
       close: function() {
         this.showing = false;
         this.queue.shift();
+      },
+      doAction: function(action) {
+        action.callback(this, action.btn);
       }
     },
     watch: {

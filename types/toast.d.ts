@@ -42,4 +42,14 @@ export interface ToastOptions {
    * Built-in transitions: fade, slide-[up/down/left/right]. See also Transitions
    */
   transition?: string;
+
+  /**
+   * If its closable
+   */
+  closable?: boolean;
+
+  /**
+   * Custom actions
+   */
+  actions?: object[];
 }
