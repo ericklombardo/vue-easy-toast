@@ -47,7 +47,10 @@ export interface ToastOptions {
    * If its closable
    */
   closable?: boolean;
-
+  /**
+   * If its modal
+   */
+  modal?: boolean;
   /**
    * Custom actions
    */

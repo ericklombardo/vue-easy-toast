@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{'et-modalDialog': showModal}">
     <transition :name="mergedOption.transition">
       <div
               :id="mergedOption.id"
@@ -8,10 +8,8 @@
               :transition="mergedOption.transition"
               v-show="showing"
       >
+        <a v-if="mergedOption.closeable" title="Cerrar" class="et-close" v-on:click="close()">X</a>
         <span class="et-content" v-html="mergedOption.message"></span>
-        <a v-if="mergedOption.closeable" v-on:click="close()">
-          <i class="fas fa-times-circle"></i>
-        </a>
         <div class="et-actions" v-show="mergedOption.actions.length">
           <button v-for="action in mergedOption.actions"
                   type="button"
@@ -49,12 +47,6 @@
   .et-actions {
     padding: 5px;
   }
-  .et-wrapper .et-close {
-    position: absolute;
-    top: 0;
-    right: 5px;
-    color: white;
-  }
   .et-wrapper.et-left {
     right: auto;
     left: 0;
@@ -84,6 +76,49 @@
   .et-wrapper.et-info {
     background-color: rgba(32, 83, 201, 0.7);
   }
+  * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .et-modalDialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    opacity:1;
+    -webkit-transition: opacity 100ms ease-in;
+    -moz-transition: opacity 100ms ease-in;
+    transition: opacity 100ms ease-in;
+  }
+  .et-close {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f26d7d;
+    color: #fff;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 34px;
+    height: 34px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+    padding-top: 5px;
+  }
+  .et-close:hover {
+    background: #fa3f6f;
+  }
+
   .fade-enter-active,
   .fade-leave-active,
   .fade-transition {
@@ -150,6 +185,7 @@
   const DEFAULT_OPT = {
     id: 'easy-toast-default',
     className: '',
+    modal: false,
     horizontalPosition: 'right',
     verticalPosition: 'top',
     parent: 'body',
@@ -197,7 +233,10 @@
           clazz.push(`et-${verticalPosition}`)
         }
         return clazz.join(' ')
-      }
+      },
+      showModal() {
+        return this.mergedOption.modal && this.showing;
+      },
     },
     methods: {
       close: function() {
