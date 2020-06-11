@@ -8,7 +8,8 @@
               :transition="mergedOption.transition"
               v-show="showing"
       >
-        <a v-if="mergedOption.closeable" title="Cerrar" class="et-close" v-on:click="close()">X</a>
+        <a v-if="mergedOption.closeable" title="Cerrar" v-on:click="close()"><i class="fal fa-times"></i></a>
+        
         <span class="et-content" v-html="mergedOption.message"></span>
         <div class="et-actions" v-show="mergedOption.actions.length">
           <button v-for="action in mergedOption.actions"
